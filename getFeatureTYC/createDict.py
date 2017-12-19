@@ -1,3 +1,4 @@
+#创建关于法条的词典，利用频繁集
 import jieba
 import xml.dom.minidom as par
 import os

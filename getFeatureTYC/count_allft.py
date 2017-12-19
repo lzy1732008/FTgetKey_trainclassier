@@ -1,4 +1,4 @@
-
+#计算前100条里面所有出现的法律
 with open('ftlist.txt','r',encoding='utf-8') as f:
       ftlist = []
       content = f.readline()
