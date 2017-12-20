@@ -7,6 +7,7 @@ import getftkey
 import re
 import difflib
 
+
 from gensim.models import word2vec
 def buildmodel(corpuspath,modelpath):
     print('build model......')
@@ -30,10 +31,13 @@ def getQW(path):
 def setCor(dicpath,corpus):
     print('setCor:'+dicpath)
     filepathlist = os.listdir(dicpath)
+    order = 0
     for filepath in filepathlist:
+        print(order)
         content = getQW(dicpath+'\\'+filepath)
         contentcut = jieba.lcut(content)
         corpus.append(contentcut)
+        order += 1
     return corpus
 
 def get_similar_words_str(w, model, topn = 10):
