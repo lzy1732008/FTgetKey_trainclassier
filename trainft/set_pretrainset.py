@@ -33,8 +33,6 @@ def get_similar_word_count(key,content):
             i+= 1
     return sum
 
-
-
 def setdata(wsstart,wsend):
     print('thread %s is running...' % threading.current_thread().name)
 

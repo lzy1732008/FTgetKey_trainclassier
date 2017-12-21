@@ -2,6 +2,7 @@
 
 import jieba.posseg as pos
 import jieba.analyse as ana
+import math
 
 HYF = '中华人民共和国婚姻法'
 ZZFY = '最高人民法院关于人民法院审理离婚案件处理子女抚养问题的若干具体意见'
@@ -22,8 +23,8 @@ SSFYJN = '诉讼费用交纳办法'
 ftmcList = [HYF,ZZFY,FYZNYJ,WDJTJ,HYFJS_2,HYFJS_1,HYFJS_3,MSSSF,MFTZ,MSSSZJ,GATMS,GX,MSSSFYJ,JYCX,SSFYJN]
 
 def getKeyFormftList(sentences):
-    # ft_key = {}
-    ft_key = []
+    ft_key = {}
+    # ft_key = []
     # word_flag = ['n', 'nr', 'v', 'nr', 'nt', 'l', 'a', 'm', 't', 'j']
     # n,nr,v,nr,nt,l,a,m,t,j
     for sentence in sentences:
@@ -31,18 +32,22 @@ def getKeyFormftList(sentences):
         cuttags = pos.cut(sentence)
         # print(sentence)
         for (word, flag) in cuttags:
-            # tf, idf, mul = count_tfidf(sentence, word, sentences)
-            if flag != 'p' and flag!='x':
-                ft_key.append(word)
+            if flag != 'p' and flag != 'x' and word not in word_tfidf and len(word) > 1:
+               tf, idf, mul = count_tfidf(sentence, word, sentences)
+               word_tfidf[word] = mul
+
+                # ft_key.append(word)
               # print('%s:%f,%f,%f--%s'%(word,tf,idf,mul,flag))
         #         word_tfidf[word] = mul
         # ft_key[sentence] = word_tfidf
+        ft_key[sentence] = word_tfidf
+    normailize(ft_key)
     return ft_key
 
 def count_tfidf(sentence,word,sentences):
     all_time,file_haveword = count_word_in_allFile(word,sentences)
-    tf = str(sentence).count(word)/all_time
-    idf = len(sentences)/file_haveword
+    tf = str(sentence).count(word)/len(pos.lcut(sentence))
+    idf = math.log(len(sentences)/file_haveword)
     mul = tf*idf
     return tf,idf,mul
 
@@ -68,6 +73,7 @@ def getftnr(ftname,ts):
     return ftnr
 
 def normailize(ft_key):
+    print('enter normailize')
     max_num = 0
     min_num = 1000000
     for (ftnr,ftkey) in ft_key.items():
@@ -81,8 +87,9 @@ def normailize(ft_key):
         print(ftnr)
         for (key, value) in ftkey.items():
              ftkey[key] = value/(max_num-min_num)
-             if ftkey[key]>= 0.3:
-                 print('%s:%f' % (key,ftkey[key]))
+             # if ftkey[key]>= 0.3:
+             #     print('%s:%f' % (key,ftkey[key]))
+             print('%s:%f' % (key, ftkey[key]))
 
 
 def getftKey():
@@ -101,6 +108,7 @@ def getftKey():
             s = f.readline()
 
     ft_key = getKeyFormftList(allft)
+    normailize(ft_key)
     return ft_key
 
 getftKey()
