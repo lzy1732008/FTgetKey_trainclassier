@@ -89,8 +89,9 @@ def normailize(ft_key):
              ftkey[key] = value/(max_num-min_num)
              # if ftkey[key]>= 0.3:
              #     print('%s:%f' % (key,ftkey[key]))
-             print('%s:%f' % (key, ftkey[key]))
+             # print('%s:%f' % (key, ftkey[key]))
 
+        print(sorted(ftkey.items(), key=lambda d: d[1]))
 
 def getftKey():
     with open('D:\\南大\\学习\\codeTrain\\FTgetKey_trainclassier\\txt\\ftlist.txt','r',encoding='utf-8') as f:
@@ -104,7 +105,7 @@ def getftKey():
                 nr = 'ff'
                 nr = getftnr('D:\\南大\\学习\\codeTrain\\FTgetKey_trainclassier\\laws\\'+ftmc+'_标准化.txt',ts)
                 allft.append(nr)
-                print(nr)
+                # print(nr)
             s = f.readline()
 
     ft_key = getKeyFormftList(allft)
